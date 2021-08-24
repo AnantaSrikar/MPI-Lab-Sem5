@@ -49,11 +49,10 @@ void *getCLargs(int type, int argc, char **argv)
 	{
 		switch(type)
 		{
-			case 0: // TODO: Char is not working ;-;
+			case 0:
 				{
 					char **temp_ptr = (char**)input_arr;
-					temp_ptr[i] = (char*)malloc(sizeof(char) * strlen(argv[i]));
-					strcpy(temp_ptr[i], argv[i]);
+					temp_ptr[i - 1] = argv[i];
 					break;
 				}
 

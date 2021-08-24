@@ -2,10 +2,10 @@
 
 all: int_rep
 
-int_rep: int_rep.o convert.o cl-args.o
-	gcc int_rep.o convert.o cl-args.o -o int_rep
+int_rep: int_rep.o convert.o
+	gcc int_rep.o convert.o -o int_rep
 
-int_rep.o: int_rep.c convert/convert.h cl-args/cl-args.h
+int_rep.o: int_rep.c convert/convert.h
 	gcc -c int_rep.c
 
 convert.o: convert/convert.c

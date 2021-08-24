@@ -20,5 +20,5 @@ void printBits(const int size, void const * const ptr)
 			printf("%u", byte);
 		}
 	}
-	puts(""); // TODO: Change something here?
+	// puts(""); // TODO: Change something here?
 }

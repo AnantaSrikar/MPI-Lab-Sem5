@@ -12,11 +12,8 @@ int main(int argc, char **argv)
 {
 	// Processing command line arguments
 	int size = argc - 1;
-	int *input_arr = (int*)getCLargs(1, argc, argv);
+	double *input_arr = (double*)getCLargs(3, argc, argv);
 	// End of command line argument processing
-
-	for(int i = 0; i < size; i++)
-		printf("%d\n", input_arr[i]);
 
 	// printBits(sizeof(i), &i);
 

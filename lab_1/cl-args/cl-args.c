@@ -25,7 +25,7 @@ void *getCLargs(int type, int argc, char **argv)
 	switch(type)
 	{
 		case 0:
-				input_arr = (char*)malloc((argc - 1) * sizeof(char));
+				input_arr = (char**)malloc((argc - 1) * sizeof(char*));
 				break;
 
 		case 1:
@@ -49,32 +49,58 @@ void *getCLargs(int type, int argc, char **argv)
 	{
 		switch(type)
 		{
-			case 0:
-					printf("Do the same thing for chars ez :)\n");
+			case 0: // TODO: Char is not working ;-;
+				{
+					char **temp_ptr = (char**)input_arr;
+					temp_ptr[i] = (char*)malloc(sizeof(char) * strlen(argv[i]));
+					strcpy(temp_ptr[i], argv[i]);
 					break;
+				}
 
 			case 1:
+				{
 					int *temp_ptr = (int*)input_arr;
 					for(int j = 0; j < strlen(argv[i]); j++)
 						if(!isdigit(argv[i][j]) && argv[i][j] != '-')
 						{
 							printf("Please enter only numbers!\n");
-							exit(0); // TODO: Change to exit(0)?
+							exit(0);
 						}
 					temp_ptr[i - 1] = atoi(argv[i]);
 					break;
+				}
 
 			case 2:
-					printf("Do the same thing for float ez :)\n");
+				{
+					float *temp_ptr = (float*)input_arr;
+					for(int j = 0; j < strlen(argv[i]); j++)
+						if(!isdigit(argv[i][j]) && argv[i][j] != '-' && argv[i][j] != '.')
+						{
+							printf("Please enter only numbers!\n");
+							exit(0);
+						}
+					temp_ptr[i - 1] = atof(argv[i]);
 					break;
+				}
 
 			case 3:
-					printf("Do the same thing for double ez :)\n");
+				{
+					double *temp_ptr = (double*)input_arr;
+					for(int j = 0; j < strlen(argv[i]); j++)
+						if(!isdigit(argv[i][j]) && argv[i][j] != '-' && argv[i][j] != '.')
+						{
+							printf("Please enter only numbers!\n");
+							exit(0);
+						}
+					temp_ptr[i - 1] = atof(argv[i]);
 					break;
+				}
 
 			default:
+				{
 					printf("How did you even reach here?? Seriously!? Anyhow, invalid option entered for datatype, try again.\n");
 					exit(0);
+				}
 		}
 	}
 	return input_arr;

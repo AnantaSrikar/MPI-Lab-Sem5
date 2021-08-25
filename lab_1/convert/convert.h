@@ -5,3 +5,4 @@
 */
 
 void printBits(size_t, void*);
+void printBitBCD();

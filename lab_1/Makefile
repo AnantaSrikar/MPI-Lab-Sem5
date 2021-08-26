@@ -3,13 +3,13 @@
 all: int_rep bcd
 
 int_rep: int_rep.o convert.o
-	gcc int_rep.o convert.o -o int_rep
+	gcc int_rep.o convert.o -o int_rep -lm
 
 int_rep.o: int_rep.c convert/convert.h
 	gcc -c int_rep.c
 
 bcd: bcd.o convert.o
-	gcc bcd.o convert.o -o bcd
+	gcc bcd.o convert.o -o bcd -lm
 
 bcd.o: bcd.c convert/convert.h
 	gcc -c bcd.c

@@ -5,6 +5,7 @@
 */
 
 #include<stdio.h>
+#include<math.h>
 
 // Prints the bits of almost any given datatype
 void printBits(const int size, void const * const ptr)
@@ -18,7 +19,8 @@ void printBits(const int size, void const * const ptr)
 			printf("%u", (b[i] >> j) & 1);
 }
 
-void printBitBCD(int num)
+// Print BCD form of a decimal number
+void decToBCD(int num)
 {
 	unsigned char b = num;
 	
@@ -27,4 +29,15 @@ void printBitBCD(int num)
 		printf("%u", (b >> j) & 1);
 	
 	printf(" ");
+}
+
+// Print deciman form of BCD
+void BCDtoDec(char *bin_str)
+{
+	int sum = 0;
+
+	for(int i = 0; i < 4; i++)
+		sum += pow(2, (3 - i)) * (bin_str[i] - '0');
+
+	printf("%d", sum);
 }

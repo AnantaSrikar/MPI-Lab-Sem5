@@ -5,4 +5,5 @@
 */
 
 void printBits(size_t, void*);
-void printBitBCD();
+void decToBCD(int);
+void BCDtoDec(char*);

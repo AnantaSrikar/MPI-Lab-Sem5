@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+#include "convert/convert.h"
+
 void add32Bit(char*, char*);
 
 int main(int argc, char **argv)
@@ -69,6 +71,5 @@ void add32Bit(char *bin_1, char *bin_2)
 					sum[index] = '0';
 			}
 		}
-
-	printf("\n%s\n", sum);
+	binToInt(sum);
 }

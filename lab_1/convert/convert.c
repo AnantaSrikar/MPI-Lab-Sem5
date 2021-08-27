@@ -31,7 +31,7 @@ void decToBCD(int num)
 	printf(" ");
 }
 
-// Print deciman form of BCD
+// Print decimal form of BCD
 void BCDtoDec(char *bin_str)
 {
 	int sum = 0;
@@ -40,4 +40,32 @@ void BCDtoDec(char *bin_str)
 		sum += pow(2, (3 - i)) * (bin_str[i] - '0');
 
 	printf("%d", sum);
+}
+
+// Convert 32 bit / 4 byte binary to Integer
+void binToInt(char *bin_str)
+{
+	int num = 0, power = pow(2, 30);
+	
+	for(int i = 0; i < 32; i++)
+	{
+		if(i == 0)
+			if(bin_str[i] != '0')
+				num = -1 * power;
+			else
+				continue;
+		else
+			num += power * (bin_str[i] - '0');
+		
+		power /= 2;
+	}
+	
+	printf("%d", num);
+}
+
+// Convert 32 bit / 4 byte binary to Float
+void binToFloat(char *bin_str)
+{
+	float num;
+	printf("%f", num);
 }

@@ -63,9 +63,85 @@ void binToInt(char *bin_str)
 	printf("%d", num);
 }
 
-// Convert 32 bit / 4 byte binary to Float
+// Convert 32 bit / 4 byte binary to Float using IEEE-754 Standards
+/*
+	0 : Sign
+	1 - 8: Biased Exponent
+	9 - 31: Fraction
+*/
 void binToFloat(char *bin_str)
 {
-	float num;
-	printf("%f", num);
+	float num = 0;
+	float power = 0.5;
+	
+	// First let's handle the Mantissa / Fraction
+	for(int i = 9; i < 32; i++)
+	{
+		num += power * (bin_str[i] - '0');
+		power /= 2;
+	}
+
+	// Now the exponent part
+	// TODO: Fix Biased exponent thing
+	for(int i = 1; i < 9; i++)
+	{
+		printf("Time to get this working: %c\n", bin_str[i]);
+	}
+
+	// Sign
+	if(bin_str[0] == '1')
+		num *= -1;
+}
+
+// Converts 64 bit / 8 byte to long
+void binToLong(char *bin_str)
+{
+	long num = 0, power = pow(2, 62);
+	
+	for(int i = 0; i < 64; i++)
+	{
+		if(i == 0)
+			if(bin_str[i] != '0')
+				num = -1 * power;
+			else
+				continue;
+		else
+			num += power * (bin_str[i] - '0');
+		
+		power /= 2;
+	}
+	
+	printf("%ld", num);
+}
+
+// Converts 64 bit / 8 byte binary to double using IEEE-754 Standards
+/*
+	0 : Sign
+	1 - 11: Biased Exponent
+	12 - 63: Fraction
+*/
+void binToDouble(char *bin_str)
+{
+	double num = 0;
+	double power = 0.5;
+	
+	// First let's handle the Mantissa / Fraction
+	for(int i = 12; i < 64; i++)
+	{
+		num += power * (bin_str[i] - '0');
+		power /= 2;
+	}
+
+	// Now the exponent part
+	// TODO: Fix Biased exponent thing
+	for(int i = 1; i < 12; i++)
+	{
+		printf("Time to get this working: %c\n", bin_str[i]);
+	}
+
+	// Sign
+	if(bin_str[0] == '1')
+		num *= -1;
+
+	printf("%lf", num);
 }

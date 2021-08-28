@@ -10,6 +10,8 @@ void printBits(size_t, void*);
 // add_multi_bin.c
 void binToInt(char*);
 void binToFloat(char*);
+void binToLong(char*);
+void binToDouble(char*);
 
 // bcd.c
 void decToBCD(int);

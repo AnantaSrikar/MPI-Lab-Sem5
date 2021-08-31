@@ -60,7 +60,22 @@ void binToInt(char *bin_str)
 		power /= 2;
 	}
 	
-	printf("%d", num);
+	printf("Integer: %d\n", num);
+}
+
+// Convert any given binary to decimal
+int binToDec(char *bin_str, int start, int end)
+{
+	int num = 0;
+	int power = pow(2, end - start);
+
+	for(int i = start; i <= end; i++)
+	{
+		num += power * (bin_str[i] - '0');
+		power /= 2;
+	}
+	
+	return num;
 }
 
 // Convert 32 bit / 4 byte binary to Float using IEEE-754 Standards
@@ -71,8 +86,11 @@ void binToInt(char *bin_str)
 */
 void binToFloat(char *bin_str)
 {
-	float num = 0;
+	// (−1)^​s​​ × (1 + Fraction) × 2^(exp - 127)
+	float num = 1;
 	float power = 0.5;
+	
+	int biased_expo = binToDec(bin_str, 1, 8);
 	
 	// First let's handle the Mantissa / Fraction
 	for(int i = 9; i < 32; i++)
@@ -81,16 +99,14 @@ void binToFloat(char *bin_str)
 		power /= 2;
 	}
 
-	// Now the exponent part
-	// TODO: Fix Biased exponent thing
-	for(int i = 1; i < 9; i++)
-	{
-		printf("Time to get this working: %c\n", bin_str[i]);
-	}
+	// Exponent
+	num *= pow(2, biased_expo - 127);
 
 	// Sign
 	if(bin_str[0] == '1')
 		num *= -1;
+
+	printf("Float: %0.7f\n", num);
 }
 
 // Converts 64 bit / 8 byte to long
@@ -111,7 +127,7 @@ void binToLong(char *bin_str)
 		power /= 2;
 	}
 	
-	printf("%ld", num);
+	printf("Long: %ld\n", num);
 }
 
 // Converts 64 bit / 8 byte binary to double using IEEE-754 Standards
@@ -122,8 +138,11 @@ void binToLong(char *bin_str)
 */
 void binToDouble(char *bin_str)
 {
+	// (−1)^​s​​ × (1 + Fraction) × 2^(exp - 127), same as float :p
 	double num = 0;
 	double power = 0.5;
+	
+	int biased_expo = binToDec(bin_str, 1, 11);
 	
 	// First let's handle the Mantissa / Fraction
 	for(int i = 12; i < 64; i++)
@@ -132,16 +151,12 @@ void binToDouble(char *bin_str)
 		power /= 2;
 	}
 
-	// Now the exponent part
-	// TODO: Fix Biased exponent thing
-	for(int i = 1; i < 12; i++)
-	{
-		printf("Time to get this working: %c\n", bin_str[i]);
-	}
+	// Exponent
+	num *= pow(2, biased_expo - 1023);
 
 	// Sign
 	if(bin_str[0] == '1')
 		num *= -1;
 
-	printf("%lf", num);
+	printf("Double: %0.15f\n", num);
 }

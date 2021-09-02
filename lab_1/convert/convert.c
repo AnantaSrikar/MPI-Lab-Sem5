@@ -6,6 +6,7 @@
 
 #include<stdio.h>
 #include<math.h>
+#include<stdlib.h>
 
 // Prints the bits of almost any given datatype
 void printBits(const int size, void const * const ptr)
@@ -38,6 +39,13 @@ void BCDtoDec(char *bin_str)
 
 	for(int i = 0; i < 4; i++)
 		sum += pow(2, (3 - i)) * (bin_str[i] - '0');
+
+	// One digit in BCD !> 9
+	if(sum > 9)
+	{
+		printf("\nProgram HALTED!\nInvalid BCD code entered! Try again.\n");
+		exit(0);
+	}
 
 	printf("%d", sum);
 }

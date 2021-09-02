@@ -18,16 +18,30 @@ void multi32Bit(char*, char*);
 
 int main(int argc, char **argv)
 {
-	// TODO: validate argv
+	// Validating input
+	if(argc != 3)
+	{
+		printf("Incorrect number of arguments! Please go through README.md\n");
+		return -1;
+	}
+
 	int choice = atoi(argv[1]);
+
+	if(choice != 0 && choice != 1)
+	{
+		printf("Invalid choice entered. Please go through README.md\n");
+		return -1;
+	}
 
 	// Checking the lengths of the binary strings inputted
 	if(strlen(argv[2]) != 32 || strlen(argv[3]) != 32)
 	{
 		printf("%d %d\n", strlen(argv[2]), strlen(argv[3]));
 		printf("Invalid binary input length, check and try again!\n");
-		exit(0);
+		return -1;
 	}
+
+	// Input validation complete
 
 	// Doing the necessary according to input
 	switch(choice)

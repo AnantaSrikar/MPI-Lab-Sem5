@@ -19,7 +19,7 @@ void multi32Bit(char*, char*);
 int main(int argc, char **argv)
 {
 	// Validating input
-	if(argc != 3)
+	if(argc != 4)
 	{
 		printf("Incorrect number of arguments! Please go through README.md\n");
 		return -1;
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	// Checking the lengths of the binary strings inputted
 	if(strlen(argv[2]) != 32 || strlen(argv[3]) != 32)
 	{
-		printf("%d %d\n", strlen(argv[2]), strlen(argv[3]));
+		printf("1st bin: %d\n2nd bin: %d\n", strlen(argv[2]), strlen(argv[3]));
 		printf("Invalid binary input length, check and try again!\n");
 		return -1;
 	}
@@ -102,8 +102,6 @@ void addBin(char *sum, char *bin_1, char *bin_2, int size, int offset, int max)
 			else
 				sum[index] = '0';
 		}
-
-		printf("sum = %s\n", sum);
 	}
 }
 
@@ -140,12 +138,10 @@ void multi32Bit(char *bin_1, char *bin_2)
 	// Standard binary multiplication
 	for(int i = 31; i >= 0; i--)
 		if(bin_2[i] == '1')
-		{
-			printf("\n\nGot 1 at %d\n", i);
 			addBin(prod, prod, bin_1, 32, 31 - i, 64);
-		}
 
 	printf("\nPrd = %s\n", prod);
 	binToLong(prod);
+	// char test[] = "0100000000100100000000000000000000000000000000000000000000000000";
 	binToDouble(prod);
 }

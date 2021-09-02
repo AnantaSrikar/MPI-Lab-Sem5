@@ -147,7 +147,7 @@ void binToLong(char *bin_str)
 void binToDouble(char *bin_str)
 {
 	// (−1)^​s​​ × (1 + Fraction) × 2^(exp - 127), same as float :p
-	double num = 0;
+	double num = 1;
 	double power = 0.5;
 	
 	int biased_expo = binToDec(bin_str, 1, 11);

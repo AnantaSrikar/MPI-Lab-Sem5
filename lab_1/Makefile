@@ -51,7 +51,7 @@ cl-args.o: cl-args/cl-args.c
 	gcc -c cl-args/cl-args.c
 
 clean:
-	rm -f *.o *.i *.s int_rep bcd add_multi_bin
+	rm -fr *.o *.i *.s int_rep bcd add_multi_bin
 
 clean-temp:
 	rm -fr *.o *.i

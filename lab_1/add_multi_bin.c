@@ -1,5 +1,6 @@
 /*
-	Program to add or multiply two 32 bit binary numbers
+	Program to add or multiply two 32 bit binary numbers.
+	P.S.: Converts the final binary to a human readable number :)
 
 	Author: Ananta Srikar
 */
@@ -8,8 +9,10 @@
 #include<stdlib.h>
 #include<string.h>
 
+// Function prototypes for conversion
 #include "convert/convert.h"
 
+// Function prototypes for adding and multiplying
 void add32Bit(char*, char*);
 void multi32Bit(char*, char*);
 
@@ -18,6 +21,7 @@ int main(int argc, char **argv)
 	// TODO: validate argv
 	int choice = atoi(argv[1]);
 
+	// Checking the lengths of the binary strings inputted
 	if(strlen(argv[2]) != 32 || strlen(argv[3]) != 32)
 	{
 		printf("%d %d\n", strlen(argv[2]), strlen(argv[3]));
@@ -25,6 +29,7 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 
+	// Doing the necessary according to input
 	switch(choice)
 	{
 		case 0:
@@ -47,6 +52,7 @@ int main(int argc, char **argv)
 	return(0);
 }
 
+// Function to add binary numbers of any given size
 void addBin(char *sum, char *bin_1, char *bin_2, int size, int offset, int max)
 {
 	int carry = 0;
@@ -94,6 +100,7 @@ void setZero(char bin_str[], int size)
 		bin_str[i] = '0';
 }
 
+// Function to add two 32 bit binaries
 // 32 Bits = 4 bytes = sizeof(int) | sizeof(float)
 void add32Bit(char *bin_1, char *bin_2)
 {
@@ -106,7 +113,9 @@ void add32Bit(char *bin_1, char *bin_2)
 	binToFloat(sum);
 }
 
+// Function to multiply two 32 bit binaries
 // 32 Bits = 4 bytes = sizeof(int) | sizeof(float)
+// Note: Multiplying two 32 bit binaries gives a 64 bit binary.
 void multi32Bit(char *bin_1, char *bin_2)
 {
 	char prod[64];

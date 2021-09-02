@@ -1,18 +1,20 @@
 /*
-	Code to print internal binary representation of data stored in primarydatatypes (int, float, and double).
+	Code to print internal binary representation of data stored in primary datatypes (int, float, and double).
 
 	Author: Ananta Srikar
 */
 #include<stdio.h>
 #include<stdlib.h>
 
+// Function prototypes for conversion
 #include "convert/convert.h"
 
 int main(int argc, char **argv)
 {
+	// Storing the sizes of datatypes for easier access
 	int datatype_sizes[3] = {sizeof(int), sizeof(float), sizeof(double)};
+	
 	// Processing command line arguments
-
 	int choice = atoi(argv[1]);
 
 	if(!(choice >= 0 || choice < 3))
@@ -30,7 +32,7 @@ int main(int argc, char **argv)
 		P.S. - Rewriting the same code multiple times is a very bad practice
 		Use Templates if C++ is being used
 	*/
-
+	// Doing the necessary according to user choice
 	switch(choice)
 	{
 		case 0:
@@ -59,9 +61,9 @@ int main(int argc, char **argv)
 				exit(0);
 	}
 	
-	// End of command line argument processing
+	// Note to self: Write more optimised code in the future.
 
-	printf("Internal representation:\n\n");
+	printf("Internal representation: %d bits\n\n", size * 8);
 	printBits(size, data);
 
 	return(0);

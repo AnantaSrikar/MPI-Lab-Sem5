@@ -1,0 +1,17 @@
+start is like main()
+.text is where all the instructions are stored
+.data is for storing all the variables
+comments using ";"
+
+For assembling, run "nasm -felf filename.nasm -o filename.o"
+To link, run "ld filename.o -o filename"
+To execute with seeing the register output, do:
+1. "gdb -q -tui ./filename"
+2. "set disassembly-flavor intel"
+3. "break _start"
+4. "run"
+5. "layout asm"
+6. "layout regs"
+7. "stepi"
+
+Keep pressing enter till it reaches the end of the program

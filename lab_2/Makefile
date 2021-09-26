@@ -3,7 +3,7 @@
 all : add5
 
 add5: add5.o
-	ld add5.o -o add5
+	gcc add5.o -o add5 -no-pie
 
 add5.o: add5.nasm
 	nasm -felf64 add5.nasm -o add5.o

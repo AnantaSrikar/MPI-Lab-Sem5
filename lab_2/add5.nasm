@@ -2,6 +2,7 @@
 
 section .data
 	prompt_txt db "Enter number: "
+	final_txt db "Sum = %d"
 	num_sum db 0
 
 section .bss
@@ -9,10 +10,10 @@ section .bss
 	; sum resb 1
 
 section .text
-	global _start
+	global main
 	extern printf
 
-_start:
+main:
 	
 	call _printText
 	call _getInput
@@ -28,10 +29,8 @@ _start:
 
 	call _checkFinal
 	
-	; Exit the program
-	mov rax, 60
-	mov rdi, 0
-	syscall
+	mov rax, 0
+	ret
 
 _getInput:
 	mov rax, 0
@@ -67,13 +66,10 @@ _addInput:
 	ret
 
 _checkFinal:
-	mov rax, 1
-	mov rdi, 1
-	mov r9, [num_sum]
-	add r9, 48
-	mov [num_sum], r9
-	mov rsi, num_sum
-	mov rdx, 2
-	syscall
-
+	push rbp
+	mov rdi, final_txt
+	mov rsi, [num_sum]
+	mov rax, 0
+	call printf
+	pop rbp
 	ret

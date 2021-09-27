@@ -1,71 +1,65 @@
 ; Program to add 5 numbers
+; Author: Srikar
 
 section .data
-	prompt_txt db "Enter number: "
-	final_txt db "Sum = %d"
-	num_sum db 0
+	prompt_txt db "Enter number: ", 0
+	final_txt db "Sum = %d", 0
+	formatd db "%d", 0
 
 section .bss
-	input resb 1
-	; sum resb 1
+	input resd 1
+	num_sum resb 1
+	; num resd 1 ; equivalent to int num
 
 section .text
 	global main
 	extern printf
+	extern scanf
 
 main:
-	
-	call _printText
+
+	; Set sum variable to 0
+	mov rax, 0 
+	mov [num_sum], rax
+
+	sub rsp, 8; Weird issue caused by scanf. Fix from here: https://stackoverflow.com/questions/51070716/glibc-scanf-segmentation-faults-when-called-from-a-function-that-doesnt-align-r
+
+	call _printPrompt
 	call _getInput
-	call _printInput
+	call _addToSum
 
-	call _addInput
-
-	call _printText
+	call _printPrompt
 	call _getInput
-	call _printInput
+	call _addToSum
 
-	call _addInput
+	call _printFinal
 
-	call _checkFinal
-	
 	mov rax, 0
+	ret
+
+_printPrompt:
+	push rbp
+	mov rdi, prompt_txt
+	mov rax, 0
+	call printf
+	pop rbp
 	ret
 
 _getInput:
-	mov rax, 0
-	mov rdi, 0
+	push rbp
+	mov rdi, formatd
 	mov rsi, input
-	mov rdx, 2
-	syscall
-	
-	ret
-
-_printInput:
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, input
-	mov rdx, 2
-	syscall
+	call scanf
+	pop rbp
 
 	ret
 
-_printText:
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, prompt_txt
-	mov rdx, 14
-	syscall
+_addToSum:
+	mov rax, [input]
+	add [num_sum], rax
 	ret
 
-
-_addInput:
-	mov al, [input]
-	sub al, 48
-	add [num_sum], al
-	ret
-
-_checkFinal:
+_printFinal:
 	push rbp
 	mov rdi, final_txt
 	mov rsi, [num_sum]

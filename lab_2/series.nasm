@@ -8,10 +8,6 @@ section .data
 	promt_txt_err db "Values don't fit in range!", 10
 
 	final_txt db "Sum of series = %d", 10, 0
-
-	debug_rbx_txt db "RBX = %d", 10, 0
-	debug_r12_txt db "R12 = %d", 10, 0
-	debug_exp_txt db "EXP = %d", 10, 0
 	
 	formatd db "%d", 0
 
@@ -19,7 +15,6 @@ section .bss
 	x resd 1
 	n resd 1
 	exp resd 1
-	prod_sum resd 1
 
 section .text
 	global main
@@ -28,10 +23,9 @@ section .text
 
 main:
 	; TODO: Check for x and n > 0
-
-	; Set prod_sum variable to 0
-	mov rax, 0
-	mov [prod_sum], rax
+	
+	; r13 will shall hold sum of series. Variable not working for some reason.
+	mov r13, 1
 
 	sub rsp, 8; Weird issue caused by scanf. Fix from here: https://stackoverflow.com/questions/51070716/glibc-scanf-segmentation-faults-when-called-from-a-function-that-doesnt-align-r
 
@@ -49,7 +43,7 @@ main:
 
 	call _addLoop
 
-	call _printFinal
+	call _printFinal	; printing the final sum
 
 	mov rax, 0
 	ret
@@ -62,13 +56,9 @@ _addLoop:
 	mov [exp], rax
 
 	mov r12, 0
-	call _calcExp
+	call _calcExp	; getting the x^i
 
-	call _printRBX
-	call _printEXP
-
-	mov rax, [exp]
-	add [prod_sum], rax
+	add r13, [exp]	; adding it to pool of sums
 
 
 	cmp ebx, [n]
@@ -114,7 +104,8 @@ _getN:
 
 	ret
 
-; Using r12 to prevent interfering with outer loop
+; Using r12 int iteration to prevent interfering with outer loop
+; Subroutine to get the power of a num
 _calcExp:
 
 	add r12, 1
@@ -132,35 +123,7 @@ _calcExp:
 _printFinal:
 	push rbp
 	mov rdi, final_txt
-	mov rsi, [prod_sum]
-	mov rax, 0
-	call printf
-	pop rbp
-	ret
-
-_printRBX:
-	push rbp
-	mov rdi, debug_rbx_txt
-	mov rsi, rbx
-	mov rax, 0
-	call printf
-	pop rbp
-	ret
-
-
-_printR12:
-	push rbp
-	mov rdi, debug_r12_txt
-	mov rsi, r12
-	mov rax, 0
-	call printf
-	pop rbp
-	ret
-
-_printEXP:
-	push rbp
-	mov rdi, debug_exp_txt
-	mov rsi, [exp]
+	mov rsi, r13
 	mov rax, 0
 	call printf
 	pop rbp

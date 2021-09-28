@@ -20,5 +20,8 @@ series: series.o
 series.o: series.nasm
 	nasm -felf64 series.nasm -o series.o
 
+clean-temp:
+	rm -fr *.o
+
 clean:
 	rm -fr *.o add5 mul3 series

@@ -1,6 +1,6 @@
 # -*- MakeFile -*-
 
-all : add5
+all : add5 mul3
 
 add5: add5.o
 	gcc add5.o -o add5 -no-pie
@@ -8,5 +8,11 @@ add5: add5.o
 add5.o: add5.nasm
 	nasm -felf64 add5.nasm -o add5.o
 
+mul3: mul3.o
+	gcc mul3.o -o mul3 -no-pie
+
+mul3.o: mul3.nasm
+	nasm -felf64 mul3.nasm -o mul3.o
+
 clean:
-	rm -fr *.o add5
+	rm -fr *.o add5 mul3

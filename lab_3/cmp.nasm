@@ -1,4 +1,4 @@
-; Program to check for even hex numbers
+; Program to check for hec numbers > 0, < 0, and = 0
 ; Author: Srikar
 
 section .data
@@ -9,6 +9,9 @@ section .data
 
 section .bss
 	input resb 1
+	num_lz resb 1
+	num_ez resb 1
+	num_gz resb 1
 
 section .text
 	global main
@@ -17,8 +20,11 @@ section .text
 
 main:
 
-	; We will use r13 as our sum register
-	mov r13, 0
+	; Setting our variables to 0
+	mov rax, 0
+	mov [num_lz], rax
+	mov [num_ez], rax
+	mov [num_gz], rax
 
 	; sub rsp, 8; Weird issue caused by scanf. Fix from here: https://stackoverflow.com/questions/51070716/glibc-scanf-segmentation-faults-when-called-from-a-function-that-doesnt-align-r
 
@@ -31,13 +37,12 @@ main:
 	mov rax, 0
 	ret
 
-; The loop to input the numbers
 _IOiteration:
 	add ebx, 1
 	
 	call _printPrompt
 	call _getInput
-	call _checkInput
+	call _cmpZero
 
 	loop_end:
 	cmp ebx, 10
@@ -45,7 +50,6 @@ _IOiteration:
 	
 	ret
 
-; Subroutine to promt for user input
 _printPrompt:
 	push rbp
 	mov rdi, prompt_txt
@@ -56,7 +60,6 @@ _printPrompt:
 
 	ret
 
-; Subroutine to accept user input
 _getInput:
 	push rbp
 	mov rdi, formatd
@@ -66,23 +69,39 @@ _getInput:
 
 	ret
 
-; Check and increment even count
-_checkInput:
+_cmpZero:
 	mov rax, [input]
 
-	test rax, 1
-	jnz skip
+	cmp rax, 0
+	jl ltz
+	jz ez
+	jg gtz
 
-	inc r13
+	ltz:
+	mov rax, [num_lz]
+	inc rax
+	mov [num_lz], rax
+	jmp end
 
-	skip:
+	ez:
+	mov rax, [num_ez]
+	inc rax
+	mov [num_ez], rax
+	jmp end
+
+	gtz:
+	mov rax, [num_gz]
+	inc rax
+	mov [num_gz], rax
+	jmp end
+
+	end:
 	ret
 
-; Print the final count
 _printFinal:
 	push rbp
 	mov rdi, final_txt
-	mov rsi, r13
+	mov rsi, [num_ez]
 	mov rax, 0
 	call printf
 	pop rbp

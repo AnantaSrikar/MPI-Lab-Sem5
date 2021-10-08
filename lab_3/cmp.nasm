@@ -3,15 +3,15 @@
 
 section .data
 	prompt_txt db "Enter hex num%d: ", 0
-	final_txt db "Even hex = %d", 0
+	final_txt db "Less than 0 = %d", 10, "Equal to 0 = %d", 10, "Greater than 0 = %d", 10, 0
+
+	debug_txt_reg db "R = 0x%x", 10, 0
+	debug_txt_inp db "Input = %d", 10, 0
 
 	formatd db "%x", 0
 
 section .bss
 	input resb 1
-	num_lz resb 1
-	num_ez resb 1
-	num_gz resb 1
 
 section .text
 	global main
@@ -22,9 +22,9 @@ main:
 
 	; Setting our variables to 0
 	mov rax, 0
-	mov [num_lz], rax
-	mov [num_ez], rax
-	mov [num_gz], rax
+	mov r12, rax	; Less than 0
+	mov r13, rax	; Equal to 0
+	mov r14, rax	; Greater than 0
 
 	; sub rsp, 8; Weird issue caused by scanf. Fix from here: https://stackoverflow.com/questions/51070716/glibc-scanf-segmentation-faults-when-called-from-a-function-that-doesnt-align-r
 
@@ -45,7 +45,7 @@ _IOiteration:
 	call _cmpZero
 
 	loop_end:
-	cmp ebx, 10
+	cmp ebx, 3
 	jnz _IOiteration
 	
 	ret
@@ -70,38 +70,60 @@ _getInput:
 	ret
 
 _cmpZero:
-	mov rax, [input]
+	mov al, [input]
 
-	cmp rax, 0
+	call _printDebugRAX
+
+	; mov rax, -1
+
+	; TODO: Try test instead of jmp
+	test al, al
 	jl ltz
 	jz ez
 	jg gtz
 
 	ltz:
-	mov rax, [num_lz]
-	inc rax
-	mov [num_lz], rax
+	inc r12
+	; call _printDebugRAX
 	jmp end
 
 	ez:
-	mov rax, [num_ez]
-	inc rax
-	mov [num_ez], rax
+	inc r13
 	jmp end
 
 	gtz:
-	mov rax, [num_gz]
-	inc rax
-	mov [num_gz], rax
+	inc r14
 	jmp end
 
 	end:
+
+	call _printFinal
 	ret
 
 _printFinal:
 	push rbp
 	mov rdi, final_txt
-	mov rsi, [num_ez]
+	mov rsi, r12
+	mov rdx, r13
+	mov rcx, r14
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+_printDebugRAX:
+	push rbp
+	mov rdi, debug_txt_reg
+	mov rsi, rax
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+_printDebugR12:
+	push rbp
+	mov rdi, debug_txt_reg
+	mov rsi, r12
 	mov rax, 0
 	call printf
 	pop rbp

@@ -28,6 +28,7 @@ main:
 
 	call _printFinal
 
+	; Safe termination of the process
 	mov rax, 0
 	ret
 

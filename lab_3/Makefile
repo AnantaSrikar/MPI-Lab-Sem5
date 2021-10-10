@@ -14,8 +14,14 @@ cmp: cmp.o
 cmp.o: cmp.nasm
 	nasm -felf64 cmp.nasm -o cmp.o
 
+parity: parity.o
+	gcc parity.o -o parity -no-pie
+
+parity.o: parity.nasm
+	nasm -felf64 parity.nasm -o parity.o
+
 clean-temp:
 	rm -fr *.o
 
 clean:
-	rm -fr *.o even cmp
+	rm -fr *.o even cmp parity

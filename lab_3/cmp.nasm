@@ -1,12 +1,9 @@
-; Program to check for hec numbers > 0, < 0, and = 0
+; Program to check for hex numbers > 0, < 0, and = 0
 ; Author: Srikar
 
 section .data
 	prompt_txt db "Enter hex num%d: ", 0
 	final_txt db "Less than 0 = %d", 10, "Equal to 0 = %d", 10, "Greater than 0 = %d", 10, 0
-
-	debug_txt_reg db "R = 0x%x", 10, 0
-	debug_txt_inp db "Input = %d", 10, 0
 
 	formatd db "%x", 0
 
@@ -34,6 +31,7 @@ main:
 
 	call _printFinal
 
+	; Safe termination of the process
 	mov rax, 0
 	ret
 
@@ -45,7 +43,7 @@ _IOiteration:
 	call _cmpZero
 
 	loop_end:
-	cmp ebx, 3
+	cmp ebx, 20	; Input 20 numbers
 	jnz _IOiteration
 	
 	ret
@@ -72,19 +70,16 @@ _getInput:
 _cmpZero:
 	mov al, [input]
 
-	call _printDebugRAX
+	; Maybe this is nicer?
+	; shr al	; shifts all bits right 1, lowest bit to carry flag
 
-	; mov rax, -1
-
-	; TODO: Try test instead of jmp
-	test al, al
+	cmp al, 0
 	jl ltz
 	jz ez
 	jg gtz
 
 	ltz:
 	inc r12
-	; call _printDebugRAX
 	jmp end
 
 	ez:
@@ -106,24 +101,6 @@ _printFinal:
 	mov rsi, r12
 	mov rdx, r13
 	mov rcx, r14
-	mov rax, 0
-	call printf
-	pop rbp
-	ret
-
-_printDebugRAX:
-	push rbp
-	mov rdi, debug_txt_reg
-	mov rsi, rax
-	mov rax, 0
-	call printf
-	pop rbp
-	ret
-
-_printDebugR12:
-	push rbp
-	mov rdi, debug_txt_reg
-	mov rsi, r12
 	mov rax, 0
 	call printf
 	pop rbp

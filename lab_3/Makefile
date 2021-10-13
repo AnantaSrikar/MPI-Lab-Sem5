@@ -1,6 +1,6 @@
 # -*- MakeFile -*-
 
-all : even cmp
+all : even cmp parity
 
 even: even.o
 	gcc even.o -o even -no-pie

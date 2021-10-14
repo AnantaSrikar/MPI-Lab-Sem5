@@ -6,7 +6,7 @@ section .data
 
 	op_nl_txt db 10, 0	; New line character
 	op_sl_element db "'%d' ", 0
-	op_sl_matrix db "Matrix %c:", 10, 0
+	op_matrix_info db "Matrix %c:", 10, 0
 
 	input_formatd db "%d"
 
@@ -74,7 +74,7 @@ _printMatrixA:
 	mov r13, 0	; j
 
 	mov r15, "A"
-	call _printMatrixOP
+	call _printMatrixOP	; Info on OP
 
 	loop1A:
 
@@ -91,6 +91,8 @@ _printMatrixA:
 	inc r12
 	cmp r12, 3
 	jl loop1A
+
+	call _printnl
 
 	ret
 
@@ -153,6 +155,9 @@ _printMatrixB:
 	mov r12, 0	; i
 	mov r13, 0	; j
 
+	mov r15, "B"
+	call _printMatrixOP	; Info on OP
+
 	loop1B:
 
 		mov r13, 0
@@ -168,6 +173,8 @@ _printMatrixB:
 	inc r12
 	cmp r12, 3
 	jl loop1B
+
+	call _printnl
 
 	ret
 
@@ -203,6 +210,9 @@ _printINPpromtB:
 _printMatrixC:
 	mov r12, 0	; i
 	mov r13, 0	; j
+
+	mov r15, "C"
+	call _printMatrixOP	; Info on OP
 
 	loop1C:
 
@@ -289,4 +299,14 @@ _addMatrices:
 	cmp r12, 3
 	jl loop1ADD
 
+	ret
+
+; Prints text for making output informative
+_printMatrixOP:
+	push rbp
+	mov rdi, op_matrix_info
+	mov rsi, r15
+	mov rax, 0
+	call printf
+	pop rbp
 	ret

@@ -1,12 +1,12 @@
+; Program to add two 3x3 matrices
+; Author: Srikar
+
 section .data
 	prompt_txt_matrix db "Enter Matrix %c element (%d, %d): ", 0
 
-	op_sl_txt db "0 ", 0
-	op_nl_txt db 10, 0
-
+	op_nl_txt db 10, 0	; New line character
 	op_sl_element db "'%d' ", 0
-
-	debug_R14_txt db 10, "R14 = %d", 10, 0
+	op_sl_matrix db "Matrix %c:", 10, 0
 
 	input_formatd db "%d"
 
@@ -24,13 +24,20 @@ section .text
 
 main:
 
+	; Input the matrices
 	call _InputA
-	
-	call _printMatrixA
-
+	call _printnl
+	call _printnl
 	call _InputB
 
+	; Add the matrices
+	call _addMatrices
+
+	; Print the matrices
+	call _printMatrixA
 	call _printMatrixB
+
+	call _printMatrixC
 
 	mov rax, 0
 	ret
@@ -63,8 +70,11 @@ _InputA:
 
 ; Subroutine to print matrix A
 _printMatrixA:
-	mov r12, 0
-	mov r13, 0
+	mov r12, 0	; i
+	mov r13, 0	; j
+
+	mov r15, "A"
+	call _printMatrixOP
 
 	loop1A:
 
@@ -140,8 +150,8 @@ _InputB:
 
 ; Subroutine to print matrix B
 _printMatrixB:
-	mov r12, 0
-	mov r13, 0
+	mov r12, 0	; i
+	mov r13, 0	; j
 
 	loop1B:
 
@@ -189,6 +199,45 @@ _printINPpromtB:
 	pop rbp
 	ret
 
+; Subroutine to print matrix C
+_printMatrixC:
+	mov r12, 0	; i
+	mov r13, 0	; j
+
+	loop1C:
+
+		mov r13, 0
+
+		loop2C:
+			call _printMatrixCCell
+		inc r13
+		cmp r13, 3
+		jl loop2C
+	
+		call _printnl
+
+	inc r12
+	cmp r12, 3
+	jl loop1C
+
+	ret
+
+; Print a  given cell in matrix C
+_printMatrixCCell:
+	mov rax, 3
+	mul r12
+	mov r14, rax	; NASM not allowing it during dereferencing
+
+	movzx rcx, byte [matrixC + r14 + r13]
+
+	push rbp
+	mov rdi, op_sl_element
+	mov rsi, rcx
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
 ; To simple print a new line, nothing more :)
 _printnl:
 	push rbp
@@ -205,5 +254,39 @@ _getInput:
 	mov rsi, num_input
 	call scanf
 	pop rbp
+	ret
+
+; Subroutine to add the matrices
+_addMatrices:
+	mov r12, 0	; i
+	mov r13, 0	; j
+
+	call _printnl
+	call _printnl
+
+	loop1ADD:
+
+		mov r13, 0
+
+		loop2ADD:
+			
+			mov rax, 3
+			mul r12
+			mov r14, rax	; NASM not allowing it during dereferencing
+
+			movzx rcx, byte [matrixB + r14 + r13]
+
+			movzx rax, byte [matrixA + r14 + r13]
+			movzx rbx, byte [matrixB + r14 + r13]
+			add rax, rbx	; Add the individual cells, simple matrix addition
+			mov [matrixC + r14 + r13], rax	; Move the sum to the matrix C
+
+		inc r13
+		cmp r13, 3
+		jl loop2ADD
+
+	inc r12
+	cmp r12, 3
+	jl loop1ADD
 
 	ret

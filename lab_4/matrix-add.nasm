@@ -2,7 +2,11 @@ section .data
 	prompt_txt_matrix db "Enter Matrix %c element (%d, %d): ", 0
 
 	op_sl_txt db "0 ", 0
-	op_nl_txt db 10
+	op_nl_txt db 10, 0
+
+	op_sl_element db "'%d' ", 0
+
+	debug_R14_txt db 10, "R14 = %d", 10, 0
 
 	input_formatd db "%d"
 
@@ -21,6 +25,8 @@ section .text
 main:
 
 	call _InputA
+	
+	call _printMatrixA
 
 
 	mov rax, 0
@@ -36,7 +42,12 @@ _InputA:
 			call _printINPpromtA
 			call _getInput
 			mov rcx, [num_input]
-			mov [matrixA + 3*r12 + r13], rcx
+
+			mov rax, 3
+			mul r12
+			mov r14, rax
+
+			mov [matrixA + r14 + r13], rcx
 		inc r13
 		cmp r13, 3
 		jl inputCOL
@@ -62,24 +73,43 @@ _printnl:
 	pop rbp
 	ret
 
-_printMatrix:
+_printMatrixA:
 	mov r12, 0
-	mov rbx, 0
+	mov r13, 0
 
 	loop1:
 
+		mov r13, 0
+
 		loop2:
-			call _printsl
-			inc rbx
-		cmp rbx, 3
+			call _printMatrixACell
+		inc r13
+		cmp r13, 3
 		jl loop2
 	
-	call _printnl
+		call _printnl
 
 	inc r12
 	cmp r12, 3
-	mov rbx, 0
 	jl loop1
+
+	ret
+
+_printMatrixACell:
+	mov rax, 3
+	mul r12
+	mov r14, rax
+
+	; call _printR14
+
+	movzx rcx, byte [matrixA + r14 + r13]
+
+	push rbp
+	mov rdi, op_sl_element
+	mov rsi, rcx
+	mov rax, 0
+	call printf
+	pop rbp
 	ret
 
 _printINPpromtA:
@@ -88,6 +118,18 @@ _printINPpromtA:
 	mov rsi, "A"
 	mov rdx, r12	; i
 	mov rcx, r13	; j
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+_printR14:
+	mov r15, r14
+	add r15, r13
+
+	push rbp
+	mov rdi, debug_R14_txt
+	mov rsi, r15
 	mov rax, 0
 	call printf
 	pop rbp

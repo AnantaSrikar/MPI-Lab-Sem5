@@ -1,4 +1,4 @@
-# Lab_2
+# Lab_3
 Consists of 3 files:
 1. `even.nasm`: Program to count the number of
 even numbers from a given series of 8-bit hexadecimal numbers.

@@ -91,8 +91,6 @@ _cmpZero:
 	jmp end
 
 	end:
-
-	call _printFinal
 	ret
 
 _printFinal:

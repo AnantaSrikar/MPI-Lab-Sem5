@@ -1,4 +1,4 @@
-; Program to add two 3x3 matrices
+; Program to multiply two 3x3 matrices
 ; Author: Srikar
 
 section .data
@@ -31,7 +31,7 @@ main:
 	call _InputB
 
 	; Add the matrices
-	call _addMatrices
+	call _mulMatrices
 
 	; Print the matrices
 	call _printMatrixA
@@ -266,36 +266,55 @@ _getInput:
 	pop rbp
 	ret
 
-; Subroutine to add the matrices
-_addMatrices:
+; TODO: Initialize C to zero to prevent junk values
+
+; Subroutine to multiply the matrices
+_mulMatrices:
 	mov r12, 0	; i
 	mov r13, 0	; j
+	mov r14, 0	; k
 
 	call _printnl
 	call _printnl
 
-	loop1ADD:
+	loop1MUL:
 
 		mov r13, 0
 
-		loop2ADD:
+		loop2MUL:
 			
-			mov rax, 3
-			mul r12
-			mov r14, rax	; NASM not allowing it during dereferencing
+			mov r14, 0
 
-			movzx rax, byte [matrixA + r14 + r13]
-			movzx rbx, byte [matrixB + r14 + r13]
-			add rax, rbx	; Add the individual cells, simple matrix addition
-			mov [matrixC + r14 + r13], rax	; Move the sum to the matrix C
+			loop3MUL:
+
+				; For A[i][k]
+				mov rax, 3
+				mul r12
+				mov r15, rax	; NASM not allowing it during dereferencing
+
+				; For B[k][j]
+				mov rax, 3
+				mul r14
+				mov r8, rax
+
+				; Implementing C[i][j] = A[i][k] * B[k][j]
+
+				movzx rax, byte [matrixA + r15 + r14]
+				movzx rbx, byte [matrixB + r8 + r13]
+				mul rbx	; Add the individual cells, simple matrix addition
+				add [matrixC + r15 + r13], rax	; Add the prod to its respective cell
+
+			inc r14
+			cmp r14, 3
+			jl loop3MUL
 
 		inc r13
 		cmp r13, 3
-		jl loop2ADD
+		jl loop2MUL
 
 	inc r12
 	cmp r12, 3
-	jl loop1ADD
+	jl loop1MUL
 
 	ret
 

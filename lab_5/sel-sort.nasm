@@ -3,14 +3,15 @@
 
 section .data
 	prompt_txt_num_elements db "Enter the number of elements: ", 0
-	prompt_txt_matrix db "Enter arr[%d]: ", 0
+	prompt_txt_element db "Enter arr[%d]: ", 0
 
-	op_arr_info db "Sorted elements:", 10, 0
+	op_arr_info db 10, "Sorted elements:", 10, 0
 	op_arr_ele db "%d ", 0
 
 	input_format db "%d"
 
 section .bss
+	input resd 1	; To store user input temporarily
 	arr_size resd 1	; To store array size
 	arr resq 1		; To store array pointer
 
@@ -71,13 +72,33 @@ _allocateArrMem:
 
 	ret
 
+_printElementPromt:
+	push rbp
+	mov rdi, prompt_txt_element
+	mov rsi, r12
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+	
+
+_getArrayElement:
+	push rbp
+	mov rdi, input_format
+	mov rsi, input
+	call scanf
+	pop rbp
+	ret
+
 _getInputArray:
 	mov r12, 0
 	movzx r13, byte [arr_size]
 
 	inp_loop:
-		; TODO: Copy from user input
-		mov [arr + 4 * r12], r12
+		call _printElementPromt
+		call _getArrayElement
+		movzx rax, byte [input]
+		mov [arr + 4 * r12], rax
 	inc r12
 	cmp r12, r13
 	jl inp_loop

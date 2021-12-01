@@ -1,0 +1,133 @@
+; Program to sort an array of numbers using selection sort algorithm
+; Author: Srikar
+
+section .data
+	prompt_txt_num_elements db "Enter the number of elements: ", 0
+	prompt_txt_matrix db "Enter arr[%d]: ", 0
+
+	op_arr_info db "Sorted elements:", 10, 0
+	op_arr_ele db "%d ", 0
+
+	input_format db "%d"
+
+section .bss
+	arr_size resd 1	; To store array size
+	arr resq 1		; To store array pointer
+
+
+section .text
+	global main
+	extern printf
+	extern scanf
+	extern malloc
+
+main:
+
+	; Input the array size
+	; sub rsp, 8
+	call _getInputArrSizePrompt
+
+	call _allocateArrMem
+
+	; For testing, give numbers 0 - n
+	call _getInputArray
+
+	; Sort the array using selection sort
+	; call _selSort
+
+	; ; Print the array
+	call _printArray
+
+	mov rax, 0
+	ret
+
+; Subroutine to accept user input for array size
+_getInputArrSizePrompt:
+	call _printIPprompt
+	call _getInputArrSize
+	ret
+	
+_getInputArrSize:
+	push rbp
+	mov rdi, input_format
+	mov rsi, arr_size
+	call scanf
+	pop rbp
+
+	ret
+
+_allocateArrMem:
+	movzx r12, byte [arr_size]
+	mov rax, r12
+	mov r12, 4	; Size of int is 4 bytes
+	mul r12
+	mov r12, rax
+	
+	push rbp
+	mov rdi, r12
+	call malloc
+	mov [arr], rax
+	pop rbp
+
+	ret
+
+_getInputArray:
+	mov r12, 0
+	movzx r13, byte [arr_size]
+
+	inp_loop:
+		; TODO: Copy from user input
+		mov [arr + 4 * r12], r12
+	inc r12
+	cmp r12, r13
+	jl inp_loop
+
+	ret
+
+; Subroutine to execute the selection sort
+_selSort:
+	ret
+
+_printIPprompt:
+	push rbp
+	mov rdi, prompt_txt_num_elements
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+_printOPprompt:
+	push rbp
+	mov rdi, op_arr_info
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+
+_printArrayElement:
+	movzx rcx, byte [arr + 4 * r12]
+
+	push rbp
+	mov rdi, op_arr_ele
+	mov rsi, rcx
+	mov rax, 0
+	call printf
+	pop rbp
+	ret
+
+_printArrayElements:
+	mov r12, 0
+	movzx r13, byte [arr_size]
+
+	op_loop:
+		call _printArrayElement
+		inc r12
+	cmp r12, r13
+	jl op_loop
+
+	ret
+
+_printArray:
+	call _printOPprompt
+	call _printArrayElements

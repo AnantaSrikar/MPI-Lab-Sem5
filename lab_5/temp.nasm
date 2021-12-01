@@ -8,6 +8,9 @@ section .data
 
 	op_test db "%d", 10, 0
 
+section .bss
+	arr resq 1	; Pointer to the memory location
+
 section .text
 	global main
 	extern printf
@@ -17,24 +20,24 @@ section .text
 main:
 	
 
-	mov rdi, 20	; Allocates 20 bytes
+	mov rdi, 40	; Allocates 20 bytes
 	call malloc
 
-	mov r12, rax
+	mov [arr], rax
 
 	mov rbx, 0
 	loop:
-		mov [r12 + 4*rbx], rbx
+		mov [arr + 4*rbx], rbx
 		inc rbx
-		cmp rbx, 5
+		cmp rbx, 10
 		jl loop
 
 	mov rbx, 0
 	loop2:
-		movzx rcx, byte [r12 + 4*rbx]
+		movzx rcx, byte [arr + 4*rbx]
 		call _printOP
 		inc rbx
-		cmp rbx, 5
+		cmp rbx, 10
 		jl loop2
 
 	; Safe exit the process

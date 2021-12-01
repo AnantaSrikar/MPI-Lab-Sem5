@@ -25,7 +25,6 @@ section .text
 main:
 
 	; Input the array size
-	; sub rsp, 8
 	call _getInputArrSizePrompt
 
 	call _allocateArrMem
@@ -34,9 +33,9 @@ main:
 	call _getInputArray
 
 	; Sort the array using selection sort
-	; call _selSort
+	call _selSort
 
-	; ; Print the array
+	; Print the array
 	call _printArray
 
 	mov rax, 0
@@ -107,6 +106,44 @@ _getInputArray:
 
 ; Subroutine to execute the selection sort
 _selSort:
+	mov r12, 0	; This will be i
+	mov r13, 0	; This will be j
+	mov r14, 0	; This will be min_idx
+	movzx r15, byte [arr_size]	; To store the array size
+
+	sort1:
+
+		; Finding the minimum element
+		mov r14, r12
+		mov r13, r12
+		inc r13
+
+		sort2:
+			movzx rax, byte [arr + r13 * 4]
+			movzx rbx, byte [arr + r14 * 4]
+			cmp rax, rbx
+			jge s2end
+			mov r14, r13
+			s2end:
+		inc r13
+		cmp r13, r15
+		jl sort2
+
+		; Swap the min element with first element
+		movzx rax, byte [arr + r14 * 4]
+		movzx rbx, byte [arr + r12 * 4]
+
+		mov rcx, rax
+		mov rax, rbx
+		mov rbx, rcx
+
+		mov [arr + r14 * 4], rax
+		mov [arr + r12 * 4], rbx
+
+	inc r12
+	cmp r12, r15
+	jl sort1
+
 	ret
 
 _printIPprompt:
@@ -152,3 +189,4 @@ _printArrayElements:
 _printArray:
 	call _printOPprompt
 	call _printArrayElements
+	ret

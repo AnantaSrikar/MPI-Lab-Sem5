@@ -110,6 +110,7 @@ _selSort:
 	mov r13, 0	; This will be j
 	mov r14, 0	; This will be min_idx
 	movzx r15, byte [arr_size]	; To store the array size
+	dec r15
 
 	sort1:
 
@@ -119,9 +120,9 @@ _selSort:
 		inc r13
 
 		sort2:
-			movzx rax, byte [arr + r13 * 4]
-			movzx rbx, byte [arr + r14 * 4]
-			cmp rax, rbx
+			mov eax, DWORD [arr + r13 * 4]
+			mov ebx, DWORD [arr + r14 * 4]
+			cmp eax, ebx
 			jge s2end
 			mov r14, r13
 			s2end:
@@ -130,15 +131,15 @@ _selSort:
 		jl sort2
 
 		; Swap the min element with first element
-		movzx rax, byte [arr + r14 * 4]
-		movzx rbx, byte [arr + r12 * 4]
+		mov eax, DWORD [arr + r14 * 4]
+		mov ebx, DWORD [arr + r12 * 4]
 
-		mov rcx, rax
-		mov rax, rbx
-		mov rbx, rcx
+		mov ecx, eax
+		mov eax, ebx
+		mov ebx, ecx
 
-		mov [arr + r14 * 4], rax
-		mov [arr + r12 * 4], rbx
+		mov DWORD [arr + r14 * 4], eax
+		mov DWORD [arr + r12 * 4], ebx
 
 	inc r12
 	cmp r12, r15
